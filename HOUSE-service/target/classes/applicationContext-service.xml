@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd 
+							http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd 
+							http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd 
+							http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd ">
+	<!-- 指定扫描com.rjxy报下的所有类中的注解. 注意:扫描包时.会扫描指定报下的所有子孙包 -->
+	<context:component-scan base-package="com.rjxy"></context:component-scan>
+<!-- 核心事物管理器 -->
+	<bean name="hibernateTransactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<!-- 配置通知 -->
+	<tx:advice id="txAdvice" transaction-manager="hibernateTransactionManager">
+		<tx:attributes>
+			<tx:method name="save*" isolation="SERIALIZABLE"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="persist*" isolation="SERIALIZABLE"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="update*" isolation="SERIALIZABLE"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="modify*" isolation="SERIALIZABLE"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="delete*" isolation="SERIALIZABLE"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="remove*" isolation="SERIALIZABLE"
+				propagation="REQUIRED" read-only="false" />
+			<tx:method name="get*" isolation="SERIALIZABLE"
+				propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" isolation="SERIALIZABLE"
+				propagation="REQUIRED" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	<!-- 配置将通知织入目标对象 配置切点 配置切面 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.rjxy.service.impl.*ServiceImpl.*(..))"
+			id="txPc" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPc" />
+	</aop:config>
+
+
+</beans>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd 
+							http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd 
+							http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd 
+							http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd ">
+	<!-- 指定扫描com.rjxy报下的所有类中的注解 -->
+	<context:component-scan base-package="com.rjxy"></context:component-scan>
+	<!-- 读取db.properties文件 -->
+	<context:property-placeholder location="classpath:db.properties" />
+	<!-- 配置c3p0连接池 -->
+	<bean name="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>
+		<property name="driverClass" value="${jdbc.driverClass}"></property>
+		<property name="user" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+	<bean name="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 配置hibernate基本信息 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.Oracle9Dialect
+				</prop>
+				<!-- 可选配置 -->
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		<!-- 引入orm元数据,指定orm元数据所在的包路径,spring会自动读取包中的所有配置 -->
+		<property name="mappingDirectoryLocations" value="classpath:com/rjxy/bean"></property>
+	</bean>
+
+
+	<bean name="districtDao" class="com.rjxy.dao.impl.DistrictDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+
+	</bean>
+	<bean name="houseDao" class="com.rjxy.dao.impl.HouseDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean name="streetDao" class="com.rjxy.dao.impl.StreetDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+
+	</bean>
+
+	<bean name="typeDao" class="com.rjxy.dao.impl.TypeDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+
+	</bean>
+	<bean name="userDao" class="com.rjxy.dao.impl.UserDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean name="pictureDao" class="com.rjxy.dao.impl.PictureDaoImpl">
+
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+</beans>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd 
+							http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd 
+							http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd 
+							http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd ">
+	<!-- action -->
+	<!-- 注意:Action对象作用范围一定是多例的.这样才符合struts2架构 -->
+	<bean name="userAction" class="com.rjxy.action.UserAction" scope="prototype">
+
+	</bean>
+	<bean name="houseAction" class="com.rjxy.action.HouseAction"
+		scope="prototype">
+	</bean>
+	<bean name="typeAction" class="com.rjxy.action.TypeAction" scope="prototype">
+	</bean>
+		<bean name="districtAction" class="com.rjxy.action.DistrictAction" scope="prototype">
+	</bean>
+</beans>
